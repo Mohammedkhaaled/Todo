@@ -1,52 +1,113 @@
 import 'package:flutter/material.dart';
 import 'package:todo/shared/styles/colors.dart';
 
-class AddTaskBottomSheet extends StatelessWidget {
+class AddTaskBottomSheet extends StatefulWidget {
   const AddTaskBottomSheet({Key? key}) : super(key: key);
 
   @override
+  State<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();
+}
+
+class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
+  var selectedDate = DateTime.now();
+  var formKey = GlobalKey<FormState>();
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: WhiteColor,
-        borderRadius: BorderRadius.only(topLeft:Radius.circular(16) ,topRight:Radius.circular(16) ),
-      ),
-      padding: EdgeInsets.all(12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text('Add new task',style: Theme.of(context).textTheme.headline2?.copyWith(color: blackcolor,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
-          Form(child: Column(
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(
+              color: WhiteColor,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'title'
+              Text(
+                'Add New Task',
+                textAlign: TextAlign.center,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline2
+                    ?.copyWith(color: Colors.black),
+              ),
+              Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      decoration: InputDecoration(labelText: 'Title'),
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'Please enter task title';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      maxLines: 4,
+                      minLines: 4,
+                      decoration: InputDecoration(labelText: 'Description'),
+                      validator: (text) {
+                        if (text == null || text.isEmpty) {
+                          return 'Please enter task description';
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
                 ),
               ),
-              TextFormField(
-                maxLines: 4,
-                minLines: 4,
-                decoration: InputDecoration(
-                    labelText: 'description'
+              SizedBox(
+                height: 12,
+              ),
+              Text(
+                'Select Time',
+                textAlign: TextAlign.start,
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              InkWell(
+                onTap: () {
+                  OpenDatePicker();
+                },
+                child: Text(
+                  '${selectedDate.day} - ${selectedDate.month} - ${selectedDate.year}',
+                  textAlign: TextAlign.center,
                 ),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    // local database /// mobile
+                    // remote database  // online
+                  }
+                },
+                child: Text('Add Task'),
               ),
             ],
-          )),
-          SizedBox(
-            height: 12,
           ),
-          Text('Select Time',style: Theme.of(context).textTheme.headline3,),
-          SizedBox(
-            height: 8,
-          ),
-          Text('12/10/2022',style: Theme.of(context).textTheme.headline3,textAlign: TextAlign.center,),
-          SizedBox(
-            height: 12,
-          ),
-          ElevatedButton(onPressed: (){}, child: Text('Add task')),
-
-        ],
+        ),
       ),
     );
+  }
+
+  void OpenDatePicker() async {
+    var choosenDate = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime.now(),
+        lastDate: DateTime.now().add(Duration(days: 365)));
+
+    if (choosenDate != null) {
+      selectedDate = choosenDate;
+      setState(() {});
+    }
   }
 }

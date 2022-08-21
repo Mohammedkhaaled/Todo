@@ -18,16 +18,33 @@ class TaskItem extends StatelessWidget {
       ),
       child: Row(
         children: [
+          SizedBox(
+            width: 8,
+          ),
           Container(
             height: 50,
-            width: 3,
-            color: PrimaryColor,
+            width: 4,
+            color: Theme.of(context).primaryColor,
           ),
-          Expanded(child: Column(
+          SizedBox(
+            width: 8,
+          ),
+          Expanded(
+              child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('task title',style: Theme.of(context).textTheme.headline2,),
-              Text('task title',style: Theme.of(context).textTheme.headline2,)
+              Text(
+                'Task Title',
+                style: Theme.of(context).textTheme.subtitle1,
+              ),
+              Text(
+                'Task body',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline2
+                    ?.copyWith(fontSize: 12),
+              )
             ],
           )),
           Container(

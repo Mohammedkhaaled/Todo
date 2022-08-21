@@ -15,37 +15,37 @@ class HomeLayout extends StatefulWidget {
 class _HomeLayoutState extends State<HomeLayout> {
   int currentIndex = 0;
 
-  List<Widget>tabs=[TasksScreen(),SettingScreen()];
+  List<Widget> tabs = [TasksScreen(), SettingScreen()];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
+        centerTitle: false,
         title: Text(
-          "Todo",
+          "TODO",
           style: Theme.of(context).textTheme.headline1,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        elevation: 3,
-        shape: StadiumBorder(side: BorderSide(width: 3, color: WhiteColor)),
+        shape: StadiumBorder(side: BorderSide(width: 4, color: WhiteColor)),
         onPressed: () {
+          // open bottom sheet
           OpenBottomSheetToAddTask();
         },
         child: Icon(Icons.add),
       ),
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
-        notchMargin: 6,
+        notchMargin: 9,
         child: BottomNavigationBar(
           backgroundColor: Colors.transparent,
-          elevation: 0,
+          elevation: 0.0,
           currentIndex: currentIndex,
           onTap: (index) {
             currentIndex = index;
-            setState((){});
+            setState(() {});
           },
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.list), label: ''),
@@ -56,9 +56,20 @@ class _HomeLayoutState extends State<HomeLayout> {
       body: tabs[currentIndex],
     );
   }
-  OpenBottomSheetToAddTask(){
-    showModalBottomSheet(context: context, builder: (context){
-      return AddTaskBottomSheet();
-    });
+
+  OpenBottomSheetToAddTask() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          child: Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: AddTaskBottomSheet(),
+          ),
+        );
+      },
+      isScrollControlled: true,
+    );
   }
 }
